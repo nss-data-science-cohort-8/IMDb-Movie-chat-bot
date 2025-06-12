@@ -1,0 +1,93 @@
+Install VSS. If it is already installed, than modify installation.
+For more details for VSS, refer step 4 --> https://learn.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-170
+
+follow the steps mentioned in this GitHub repository to install pgvector extension in PostgreSQL. --> https://github.com/pgvector/pgvector
+
+Run below command- 
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build
+call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+
+
+set "PGROOT=C:\Program Files\PostgreSQL\16"
+cd C:\Users\nitin\Documents\NSS\NSS_Projects\pgvector
+nmake /F Makefile.win
+nmake /F Makefile.win install
+
+
+
+Output :
+
+C:\Users\nitin\Documents\NSS\NSS_Projects\pgvector>call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+**********************************************************************
+** Visual Studio 2022 Developer Command Prompt v17.6.5
+** Copyright (c) 2022 Microsoft Corporation
+**********************************************************************
+[vcvarsall.bat] Environment initialized for: 'x64'
+
+C:\Users\nitin\Documents\NSS\NSS_Projects\pgvector>set "PGROOT=C:\Program Files\PostgreSQL\16"
+
+C:\Users\nitin\Documents\NSS\NSS_Projects\pgvector>cd C:\Users\nitin\Documents\NSS\NSS_Projects\pgvector
+
+C:\Users\nitin\Documents\NSS\NSS_Projects\pgvector>nmake /F Makefile.win
+
+Microsoft (R) Program Maintenance Utility Version 14.36.32537.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+C:\Users\nitin\Documents\NSS\NSS_Projects\pgvector>nmake /F Makefile.win install
+
+Microsoft (R) Program Maintenance Utility Version 14.36.32537.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+        copy vector.dll "C:\Program Files\PostgreSQL\16\lib"
+        1 file(s) copied.
+        copy vector.control "C:\Program Files\PostgreSQL\16\share\extension"
+        1 file(s) copied.
+        copy sql\vector--*.sql "C:\Program Files\PostgreSQL\16\share\extension"
+sql\vector--0.1.0--0.1.1.sql
+sql\vector--0.1.1--0.1.3.sql
+sql\vector--0.1.3--0.1.4.sql
+sql\vector--0.1.4--0.1.5.sql
+sql\vector--0.1.5--0.1.6.sql
+sql\vector--0.1.6--0.1.7.sql
+sql\vector--0.1.7--0.1.8.sql
+sql\vector--0.1.8--0.2.0.sql
+sql\vector--0.2.0--0.2.1.sql
+sql\vector--0.2.1--0.2.2.sql
+sql\vector--0.2.2--0.2.3.sql
+sql\vector--0.2.3--0.2.4.sql
+sql\vector--0.2.4--0.2.5.sql
+sql\vector--0.2.5--0.2.6.sql
+sql\vector--0.2.6--0.2.7.sql
+sql\vector--0.2.7--0.3.0.sql
+sql\vector--0.3.0--0.3.1.sql
+sql\vector--0.3.1--0.3.2.sql
+sql\vector--0.3.2--0.4.0.sql
+sql\vector--0.4.0--0.4.1.sql
+sql\vector--0.4.1--0.4.2.sql
+sql\vector--0.4.2--0.4.3.sql
+sql\vector--0.4.3--0.4.4.sql
+sql\vector--0.4.4--0.5.0.sql
+sql\vector--0.5.0--0.5.1.sql
+sql\vector--0.5.1--0.6.0.sql
+sql\vector--0.6.0--0.6.1.sql
+sql\vector--0.6.1--0.6.2.sql
+sql\vector--0.6.2--0.7.0.sql
+sql\vector--0.7.0--0.7.1.sql
+sql\vector--0.7.1--0.7.2.sql
+sql\vector--0.7.2--0.7.3.sql
+sql\vector--0.7.3--0.7.4.sql
+sql\vector--0.7.4--0.8.0.sql
+sql\vector--0.8.0.sql
+       35 file(s) copied.
+        mkdir "C:\Program Files\PostgreSQL\16\include\server\extension\vector"
+        for %f in (src\halfvec.h src\sparsevec.h src\vector.h) do copy %f "C:\Program Files\PostgreSQL\16\include\server\extension\vector"
+
+C:\Users\nitin\Documents\NSS\NSS_Projects\pgvector>copy src\halfvec.h "C:\Program Files\PostgreSQL\16\include\server\extension\vector"
+        1 file(s) copied.
+
+C:\Users\nitin\Documents\NSS\NSS_Projects\pgvector>copy src\sparsevec.h "C:\Program Files\PostgreSQL\16\include\server\extension\vector"
+        1 file(s) copied.
+
+C:\Users\nitin\Documents\NSS\NSS_Projects\pgvector>copy src\vector.h "C:\Program Files\PostgreSQL\16\include\server\extension\vector"
+        1 file(s) copied.
