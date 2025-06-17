@@ -15,7 +15,7 @@ with open("api_key.json", "r") as fi:
 os.environ["OPENAI_API_KEY"] = api_key
 os.environ["OPENAI_API_BASE"] = "https://openrouter.ai/api/v1"
 
-question = "Tell me about Avatar movie"
+question = "WHat's so special about Gladiator"
 embedder = SentenceTransformer('all-MiniLM-L6-v2')
 
 conn = psycopg2.connect(
@@ -35,7 +35,7 @@ cur.execute("""
     SELECT mov_details, 1 - (embedding <=> %s) AS similarity
     FROM movies
     ORDER BY similarity DESC
-    LIMIT 3;
+    LIMIT 10;
     """, (embedding_array,))
 
 rows = cur.fetchall()
@@ -54,9 +54,9 @@ conn.close()
   # template for the prompt
 template = """
     You are a movie assistant.
-    Answer with not more than 1000 words.
-    If the information is not available in the context, return "I don't know".
-    Do not say "based on the context", answer straight.
+    If the information is not available in the context, return "I am sorry, I don't have enough information about it".
+    If the context doesn't have enough information, do not add your known information.
+    Do not say "based on the context", answer in natural language.
     You have to understand the context provided and answer specific to the question. The context contains multiple movies.
     question: {question}
     context: {context}
