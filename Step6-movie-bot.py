@@ -49,7 +49,7 @@ def generateResponse(question,llm):
     SELECT mov_details, 1 - (embedding <=> %s::vector) AS similarity
     FROM movies
     ORDER BY similarity DESC
-    LIMIT 20;
+    LIMIT 10;
     """, (getEmbedding(question),))
 
     rows = cur.fetchall()
@@ -67,6 +67,7 @@ def generateResponse(question,llm):
     If the context doesn't have enough information, do not add your known information.
     Do not say "based on the context", answer in natural language.
     You have to understand the context provided and answer specific to the question. The context contains multiple movies.
+    In the IMDb system, a blockbuster movie is one that has an IMDb rating above 8.5 and more than 1 million votes. Ratings are from 1 to 10
     question: {question}
     context: {context}
     Answer: 
@@ -84,15 +85,25 @@ def generateResponse(question,llm):
 
 def getALLM(llm):
     if llm == "deepseek":           
-        llm = ChatOllama(
+        llm = ChatDeepSeek(
             model="deepseek-r1"
+        )
+    
+    if llm == "llama":           
+        llm = ChatOllama(
+            model="llama3.2",
+            base_url="http://localhost:11434"
         )
     
     if llm == "openAI - Free":           
         llm = ChatOpenAI(
             base_url="https://openrouter.ai/api/v1",
-            model_name="meta-llama/llama-4-scout:free",
-            openai_api_key=api_key        
+            #model_name="meta-llama/llama-4-scout:free",
+            #model_name="meta-llama/llama-4-maverick:free",
+            #model_name="google/gemini-2.0-flash-exp:free",
+            model_name ="mistralai/mistral-small-3.1-24b-instruct:free",
+            openai_api_key=api_key,
+            #max_tokens=56000  
         )
     
     return llm
@@ -102,7 +113,7 @@ with st.sidebar:
 
     optionLLM = st.selectbox(
         "LLM:",
-        ("deepseek", "openAI - Free"),
+        ("deepseek", "openAI - Free","llama"),
         index=None,
         placeholder="Select LLM"
     )
@@ -132,8 +143,8 @@ with st.sidebar:
     st.markdown("""
     **Connect Me:**
     """)
-    st.markdown("📬 [GitHub](https://github.com/ndpawar1981/IMDb-Movie-chat-bot)")
-    st.markdown("📬 [LinkedIn](https://linkedin.com/in/nitin-pawar-ds)")
+    st.markdown("[GitHub](https://github.com/ndpawar1981/IMDb-Movie-chat-bot)")
+    st.markdown("[LinkedIn](https://linkedin.com/in/nitin-pawar-ds)")
 
 st.image("./imdb.jpeg", use_container_width=True, caption="Welcome to IMDb Movies!")
 

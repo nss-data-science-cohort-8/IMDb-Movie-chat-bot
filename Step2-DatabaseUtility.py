@@ -41,32 +41,28 @@ def create_database(db_name, db_user, db_password, db_host, db_port):
         else:
             print("Vector extension already enabled.")
         
-           # Create movies table
-        print("Creating movies table...")
-        create_table_query = """
-        CREATE TABLE IF NOT EXISTS movies (
-            mov_id VARCHAR(25) PRIMARY KEY,
-            mov_details TEXT,
-            embedding VECTOR(384)
-        );
-        """
+        # Check if table exists
+        cur.execute("select * from pg_tables where tableowner = 'postgres' and schemaname='public' and tablename = 'movies'")
+        movies_exists = cur.fetchone()
+        if not movies_exists:
+            print("Creating movies table...")
+            create_table_query = """
+            CREATE TABLE IF NOT EXISTS movies (
+                mov_id VARCHAR(25) PRIMARY KEY,
+                mov_details TEXT,
+                embedding VECTOR(384)
+            );
+            """
+            cur.execute(create_table_query)
+            print("Movies table created successfully.")
+        else:
+            print("Movies table Already Exists! Deleting existing records..")
+            cur.execute("SELECT COUNT(*) FROM movies;")
+            total_rows = cur.fetchone()[0]
+            cur.execute("DELETE FROM movies")
+            print(f"Deleted {total_rows} rows from movies table.")
         
-        cur.execute(create_table_query)
-        #conn.commit()
-        print("Movies table created successfully!")
-        
-        # Verify table creation
-        cur.execute("""
-            SELECT column_name, data_type 
-            FROM information_schema.columns 
-            WHERE table_name = 'movies'
-        """)
-        columns = cur.fetchall()
-        print("\nTable structure:")
-        for column in columns:
-            print(f"  {column[0]}: {column[1]}")
-        
-        print("\nSetup completed successfully!")
+        print("\n Database Setup completed successfully!")
 
         cur.close()
         conn.close()

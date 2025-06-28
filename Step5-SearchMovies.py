@@ -15,7 +15,7 @@ with open("api_key.json", "r") as fi:
 os.environ["OPENAI_API_KEY"] = api_key
 os.environ["OPENAI_API_BASE"] = "https://openrouter.ai/api/v1"
 
-question = "WHat's so special about Gladiator"
+question = "Suggest movies like intersteller"
 embedder = SentenceTransformer('all-MiniLM-L6-v2')
 
 conn = psycopg2.connect(
@@ -35,7 +35,7 @@ cur.execute("""
     SELECT mov_details, 1 - (embedding <=> %s) AS similarity
     FROM movies
     ORDER BY similarity DESC
-    LIMIT 10;
+    LIMIT 50;
     """, (embedding_array,))
 
 rows = cur.fetchall()
@@ -58,6 +58,8 @@ template = """
     If the context doesn't have enough information, do not add your known information.
     Do not say "based on the context", answer in natural language.
     You have to understand the context provided and answer specific to the question. The context contains multiple movies.
+
+    Use bullet points when listing multiple movies or cast members.
     question: {question}
     context: {context}
     Answer: 
@@ -71,8 +73,10 @@ prompt = prompt_template.invoke({"context": context,"question": question,})
 
 llm = ChatOpenAI(
     base_url="https://openrouter.ai/api/v1",
-    model_name="meta-llama/llama-4-scout:free",
-    openai_api_key=api_key
+    #model_name="meta-llama/llama-4-scout:free",
+    model_name="deepseek/deepseek-chat:free",
+    openai_api_key=api_key,
+    max_tokens = 58000
 )
 
 # invoke the LLM to get the response
